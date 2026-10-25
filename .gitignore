@@ -1,0 +1,10 @@
+auths/*
+!auths/.gitkeep
+config/config.yaml
+config/config.local.yaml
+.env
+.upstream/
+bin/
+logs/
+*.log
+config/config.box-hostnet.yaml

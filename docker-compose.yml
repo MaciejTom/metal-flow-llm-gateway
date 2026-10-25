@@ -1,0 +1,24 @@
+name: metal-flow-llm-gateway
+services:
+  gateway:
+    build:
+      context: .
+      network: host          # build stage clones upstream; does not affect runtime networking
+      args:
+        CLIPROXY_COMMIT: ${CLIPROXY_COMMIT:-bc0643405a1d0adf77dd0f109972ac3313d66397}
+        CLIPROXY_VERSION: ${CLIPROXY_VERSION:-v8.0.42}
+    image: metal-flow/llm-gateway:${CLIPROXY_VERSION:-v8.0.42}
+    container_name: metal-flow-llm-gateway
+    volumes:
+      - ./config/config.yaml:/app/config.yaml:ro
+      - ./auths:/root/.cli-proxy-api        # OAuth credentials; never commit
+    ports:
+      - "127.0.0.1:${GATEWAY_HOST_PORT:-8317}:8317"   # loopback only
+    networks: [llm-gateway]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -o /dev/null http://127.0.0.1:8317/ || exit 1"]
+      interval: 30s
+networks:
+  llm-gateway:
+    name: metal-flow-llm-gateway   # metal-flow-ai may join this external network

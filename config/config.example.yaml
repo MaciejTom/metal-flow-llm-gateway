@@ -1,0 +1,16 @@
+# CLIProxyAPI config for metal-flow-llm-gateway. Copy to config/config.yaml (chmod 600).
+config-version: 8
+server:
+  host: ""            # in Docker: listen inside container; compose publishes on 127.0.0.1 only.
+                      # Bare-metal run: set "127.0.0.1".
+  port: 8317
+access:
+  api-keys:
+    - "REPLACE_WITH_RANDOM_KEY"   # openssl rand -hex 24 ; clients send it as Bearer (MODEL_API_KEY)
+oauth:
+  auth-dir: "/root/.cli-proxy-api"   # bare-metal: absolute path to ./auths
+  # Gemini-only policy: hide and reject non-Gemini models of the Antigravity provider.
+  excluded-models:
+    antigravity:
+      - "claude-*"
+      - "gpt-*"

@@ -1,0 +1,11 @@
+# BOX-ONLY smoke-test override (sandbox Docker bridge has no egress). Host networking; config binds 127.0.0.1:18317. NOT for the VPS.
+services:
+  gateway:
+    network_mode: host
+    ports: !reset []
+    networks: !reset []
+    volumes: !override
+      - ./config/config.box-hostnet.yaml:/app/config.yaml:ro
+      - ./auths:/root/.cli-proxy-api
+    healthcheck:
+      disable: true

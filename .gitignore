@@ -8,3 +8,4 @@ bin/
 logs/
 *.log
 config/config.box-hostnet.yaml
+config/static/
